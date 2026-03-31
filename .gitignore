@@ -1,0 +1,4 @@
+.idea/            # Folders created by PhpStorm
+*.ini             # Local PHP configurations
+.DS_Store         # Mac system files
+php.exe           # Do not upload the actual PHP executable
