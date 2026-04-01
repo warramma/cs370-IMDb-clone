@@ -1,6 +1,7 @@
 # cs370-IMDb-clone
 Database project - IMDb Clone
 
+***IMPORTANT*** - See dotenv.example file for configuring for your own machine!!!
 ---
 
 ## Local Development Setup
