@@ -1,4 +1,18 @@
 <?php
+
+function loadEnv($path)
+{
+    if (!file_exists($path)) return;
+    $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    foreach ($lines as $line) {
+        if (strpos(trim($line), '#') === 0) continue;
+        list($name, $value) = explode('=', $line, 2);
+        $_ENV[trim($name)] = trim($value);
+    }
+}
+
+loadEnv(__DIR__ . '/.env');
+
 error_reporting(0);
 mysqli_report(MYSQLI_REPORT_OFF);
 $import_attempted = false;
@@ -7,7 +21,7 @@ $import_error_message = "";
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
     $import_attempted = true;
-    $con = mysqli_connect("localhost","pizza_user","pizzapizza","pizza_db");
+    $con = mysqli_connect($_ENV['DB_HOST'], $_ENV['DB_USER'], $_ENV['DB_PASS'], $_ENV['DB_NAME']);
     if(mysqli_connect_errno()){
         $import_error_message = "Error connecting to the database: " . mysqli_connect_error();
     }

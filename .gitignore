@@ -2,3 +2,4 @@
 *.ini
 .DS_Store
 php.exe
+.env
