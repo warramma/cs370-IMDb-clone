@@ -6,11 +6,11 @@
 </head>
 <body>
 <ul class="nav">
-    <li class="nav-item"><a class="nav-link" href="index.php">Pizza Home</a></li>
+    <li class="nav-item"><a class="nav-link" href="index.php">IMDb Home</a></li>
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">Data Import</a>
         <ul class="dropdown-menu">
-            <li class="dropdown-item"><a class="nav-link" href="import_1.php">Import Person/Pizza Data</a></li>
+            <li class="dropdown-item"><a class="nav-link" href="import_1.php">Import Data</a></li>
             <li class="dropdown-item"><a class="nav-link" href="#">Import Other Data 1</a></li>
             <li class="dropdown-item"><a class="nav-link" href="#">Import Other Data 2</a></li>
         </ul>

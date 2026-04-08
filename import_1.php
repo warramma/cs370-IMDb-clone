@@ -54,8 +54,10 @@ include('components/_header.php');
 <div class="container">
     <h1>Import 1</h1>
     <form method="post" enctype="multipart/form-data">
-        File: <input type = "file" name = "importFile" />
-        <br/>
+        <div class="input-group md-3">
+            <span class="input-group-text">File:</span>
+            <input class="form-control" type="file" name="importFile"/>
+        </div>
         <input type="submit" value="Upload Data"/>
     </form>
     <?php
