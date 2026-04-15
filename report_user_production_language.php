@@ -17,14 +17,14 @@ function output_error($title, $error){
     echo "<h4>$error</h4>\n";
     echo "</span>";
 }
-function output_table_open(){
+function output_table_open($headers){
     echo "<div class='table-responsive'>\n";
-    echo "<table class='table table-bordered table-hover pizzaDataTable'>\n";
+    echo "<table class='table table-bordered table-hover'>\n";
     echo "<thead class='table-dark'>\n";
-    echo "<tr class='pizzaDataHeaderRow'>\n";
-    echo "  <th>Name</th>\n";
-    echo "  <th>Age</th>\n";
-    echo "  <th>Gender</th>\n";
+    echo "<tr>\n";
+    foreach($headers as $header){
+        echo "<th>$header</th>\n";
+    }
     echo "  </tr>\n";
     echo "</thead>\n";
     echo "<tbody>\n";
@@ -35,12 +35,12 @@ function output_table_close(){
     echo "</div>";
 
 }
-function output_person_row($name, $age, $gender){
+function output_row($data_array){
     //will output row based on input
-    echo "<tr class='table-primary PizzaDataRow'>\n";
-    echo "  <td class='fw-bold'>" . $name . "</td>\n";
-    echo "  <td>" . $age . "</td>\n";
-    echo "  <td>" . $gender . "</td>\n";
+    echo "<tr class='table-primary'>\n";
+    foreach($data_array as $row){
+        echo "<td>$row</td>\n";
+    }
     echo "</tr>\n";
 }
 
@@ -69,85 +69,32 @@ include('components/_header.php');
 <div class="container">
     <h1>User, Production, Language Report</h1>
     <?php
-    $dummy_data = [
-        ["name" => "Amy", "age" => 22, "gender" => "female", "pizza" => "Pepperoni", "pizzeria" => "Pizza Hut"],
-        ["name" => "Amy", "age" => 22, "gender" => "female", "pizza" => "Mushroom", "pizzeria" => "Dominos"],
-        ["name" => "Ben", "age" => 30, "gender" => "male", "pizza" => "Cheese", "pizzeria" => "Little Caesars"],
-        ["name" => "Ben", "age" => 30, "gender" => "male", "pizza" => "Cheese", "pizzeria" => "Pizza Hut"],
-        ["name" => "Cal", "age" => 25, "gender" => "male", "pizza" => "Supreme", "pizzeria" => "Papa Johns"]
-    ];
+        if($connection_error){
+            output_error("Error connecting to the database: " . $connection_error_message);
+        }else{
+            echo "<h2>User Report</h2>\n";
+            $user_res = mysqli_query($con, "SELECT Name, JoinDate, BirthDate FROM User");
+            output_table_open(['Username', 'Join Date', 'Birth Date']);
+            while($row = mysqli_fetch_assoc($user_res)){
+                output_row([$row['Name'], $row['JoinDate'], $row['BirthDate']]);
+            }
+            output_table_close();
 
-    $final_data = [];
-    $used_dummy = false;
-
-    if ($connection_error) {
-        $final_data = $dummy_data;
-        $used_dummy = true;
-        output_error("Database connection error: ", $connection_error_message);
+            echo "<h2>Production Companies</h2>\n";
+            $prod_res = mysqli_query($con, "SELECT CompanyName, Headquarters, `Founded Date` FROM ProductionCompany");
+            output_table_open(['Company Name', 'Headquarters', 'Founded Date']);
+            while ($row = mysqli_fetch_assoc($prod_res)) {
+                output_row([$row['CompanyName'], $row['Headquarters'], $row['Founded Date']]);
+            }
+            output_table_close();
+            echo "<h2>Language Report</h2>\n";
+            $lang_res = mysqli_query($con, "SELECT Language FROM Language");
+            output_table_open(['Language']);
+            while($row = mysqli_fetch_assoc($lang_res)){
+                output_row([$row['Language']]);
+            }
+            output_table_close();
     }
-    else{
-        try {
-            $query = " SELECT t0.name, t0.age, t0.gender, t1.pizza, t2. pizzeria"
-                . " FROM person t0"
-                . " LEFT OUTER JOIN eats t1 ON t0.name = t1.name"
-                . " LEFT OUTER JOIN frequents t2 on t0.name = t2.name";
-
-
-            // example of user input:      . " WHERE t0.name = '" . $userSelectedName . "'"
-
-            $result = mysqli_query($con, $query);
-            //false can mean error or no records back
-            if ($result && mysqli_num_rows($result) > 0) {
-                while ($row = $result->fetch_assoc()) {
-                    $final_data[] = $row;
-                }
-            } else {
-                $final_data = $dummy_data;
-                $used_dummy = true;
-            }
-        }catch(Exception $e){
-            $final_data = $dummy_data;
-            $used_dummy = true;
-            echo "<div class='alert alert-danger'><strong>SQL Error:</strong> " . $e->getMessage() . "</div>";
-        }
-
-        }
-    if ($used_dummy) {
-        echo "<div class='alert alert-info'>Showing dummy data.</div>";
-    }
-    if(!empty($final_data)){
-            output_table_open();
-            $last_name = null; //as in last/previous name not your last name
-            $pizzas = array();
-            $pizzerias = array();
-            foreach ($final_data as $row) {
-            if ($last_name != $row['name']) {
-                if ($last_name != null) {
-                    output_person_details_row($pizzas, $pizzerias);
-                }
-                output_person_row($row['name'], $row['age'], $row['gender']);
-                $pizzas = array();
-                $pizzerias = array();
-            }
-
-            if (!empty($row['pizza']) && !in_array($row['pizza'], $pizzas)) {
-                $pizzas[] = $row['pizza'];
-            }
-            if (!empty($row['pizzeria']) && !in_array($row['pizzeria'], $pizzerias)) {
-                $pizzerias[] = $row['pizzeria'];
-            }
-            $last_name = $row['name'];
-        }
-
-        if ($last_name != null) {
-            output_person_details_row($pizzas, $pizzerias);
-        }
-        output_table_close();
-
-    }
-
-
-
     ?>
 </div>
 
