@@ -47,12 +47,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         }
     }
 }
-$pageTitle = "Import 1";
+$pageTitle = "Import Movie Data";
 
 include('components/_header.php');
 ?>
 <div class="container">
-    <h1>Import 1</h1>
+    <h1>Import Movie Data</h1>
     <form method="post" enctype="multipart/form-data">
         <div class="input-group md-3">
             <span class="input-group-text">File:</span>
