@@ -63,11 +63,11 @@ function output_person_details_row ($pizzas, $pizzerias){
     echo "</tr>\n";
 }
 
-$pageTitle = "Report 1";
+$pageTitle = "Show, Episode, Person";
 include('components/_header.php');
 ?>
 <div class="container">
-    <h1>Data Report 1</h1>
+    <h1>Show, Episode, Person Report</h1>
     <?php
     $dummy_data = [
         ["name" => "Amy", "age" => 22, "gender" => "female", "pizza" => "Pepperoni", "pizzeria" => "Pizza Hut"],
