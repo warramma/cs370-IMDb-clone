@@ -73,10 +73,10 @@ include('components/_header.php');
             output_error("Error connecting to the database: " . $connection_error_message);
         }else{
             echo "<h2>User Report</h2>\n";
-            $user_res = mysqli_query($con, "SELECT Name, JoinDate, BirthDate FROM User");
+            $user_res = mysqli_query($con, "SELECT Username, JoinDate, BirthDate FROM User");
             output_table_open(['Username', 'Join Date', 'Birth Date']);
             while($row = mysqli_fetch_assoc($user_res)){
-                output_row([$row['Name'], $row['JoinDate'], $row['BirthDate']]);
+                output_row([$row['Username'], $row['JoinDate'], $row['BirthDate']]);
             }
             output_table_close();
 
