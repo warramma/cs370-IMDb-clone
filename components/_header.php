@@ -6,7 +6,7 @@
 </head>
 <body>
 <ul class="nav">
-    <li class="nav-item"><a class="nav-link" href="../index.php">IMDb Home</a></li>
+    <li class="nav-item"><a class="nav-link" href="index.php">IMDb Home</a></li>
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">Data Import</a>
         <ul class="dropdown-menu">
@@ -24,7 +24,7 @@
             <li class="dropdown-item"><a class="nav-link" href="report_user_production_language.php">User-Production-Language Report</a></li>
         </ul>
     </li>
-
+    <li class="nav-item"><a class="nav-link" href="login.php">Login</a></li>
 </ul>
 
 
