@@ -19,6 +19,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             $stmtProd = $con->prepare("INSERT IGNORE INTO ProductionCompany (CompanyName, Headquarters, `Founded Date`) VALUES (?, ?, ?)");
             $stmtUser = $con->prepare("INSERT IGNORE INTO User (`Username`, PasswordHash, `JoinDate`, Email, Birthdate) VALUES (?, ?, ?, ?, ?)");
 
+            $rows_added = 0;
+            $invalid_rows = 0;
+
             for ($x = 1; $x < count($lines); $x++) {
                 $row = str_getcsv($lines[$x], ",", '"', "");
                 if (empty($row[0])) continue;
@@ -28,21 +31,32 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     // ERD: Language(LanguageID, Language)
                     $stmtLang-> bind_param("s", $row[1]); //bind parameters, expecting one string.
                     $stmtLang->execute();
+                    $rows_added += $stmtLang->affected_rows;
                 }
                 elseif ($type == 'Production') {
                     // ERD: Production Company(Production CompanyID, CompanyName, Headquarters, FoundedDate)
                     $stmtProd->bind_param("sss", $row[1], $row[2], $row[3]); //bind parameters, type is 3 strings.
                     $stmtProd->execute();
+                    $rows_added += $stmtLang->affected_rows;
                 }
                 elseif ($type == 'User') {
                     // ERD: User(UserID, Username, PasswordHash, Join Date, Email, Birthdate)
                     $stmtUser->bind_param("sssss", $row[1], $row[2], $row[3], $row[4], $row[5]);
                     $stmtUser->execute();
+                    $rows_added += $stmtLang->affected_rows;
+                }
+                else {
+                    // This row didn't match any known RecordType
+                    $invalid_rows++;
                 }
             }
 
-            echo "</pre>";
-            $import_succeeded = true;
+            if ($rows_added == 0 && $invalid_rows > 0 && ($invalid_rows == count($lines) - 1)) {
+                $import_succeeded = false;
+                $import_error_message = "Invalid File Format: No valid 'Language', 'Production', or 'User' records were found. Please check your CSV column structure.";
+            } else {
+                $import_succeeded = true;
+            }
         }
         catch(Exception $e){
             $import_error_message = $e->getMessage()
@@ -59,7 +73,11 @@ include('components/_header.php');
     <?php if($import_attempted): ?>
         <?php if($import_succeeded): ?>
             <div class="alert alert-success">
-                <strong>Success!</strong> The file was processed. Existing records were skipped, and new records were added.
+                <?php if($rows_added > 0): ?>
+                    Imported <?php echo $rows_added; ?> new records successfully.
+                <?php else: ?>
+                    The file was processed, but all records already existed in the database (0 new rows added).
+                <?php endif; ?>
             </div>
         <?php else: ?>
             <div class="alert alert-danger">
