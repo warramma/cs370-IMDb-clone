@@ -391,6 +391,10 @@ ENGINE = InnoDB;
 -- GRANT SELECT ON TABLE `imdb_db`.* TO 'imdb_db';
 -- GRANT EXECUTE ON ROUTINE `imdb_db`.* TO 'imdb_db';
 
+
+INSERT INTO User (Username, PasswordHash, JoinDate, Email, BirthDate)
+VALUES ('admin', '$2y$12$jDxpJ7b8LmYpMMnPKaDL.upOaQmOc1vwSNlRf92IUUHQbwiotzj9y', CURRENT_DATE(), 'admin@gmail.com', '1999-05-27');
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
