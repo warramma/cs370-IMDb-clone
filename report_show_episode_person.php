@@ -19,12 +19,14 @@ function output_error($title, $error){
 }
 function output_table_open(){
     echo "<div class='table-responsive'>\n";
-    echo "<table class='table table-bordered table-hover pizzaDataTable'>\n";
+    echo "<table class='table table-bordered table-hover showDataTable'>\n";
     echo "<thead class='table-dark'>\n";
-    echo "<tr class='pizzaDataHeaderRow'>\n";
-    echo "  <th>Name</th>\n";
-    echo "  <th>Age</th>\n";
-    echo "  <th>Gender</th>\n";
+    echo "<tr class='showDataHeaderRow'>\n";
+    echo "  <th>ShowID</th>\n";
+    echo "  <th>Title</th>\n";
+    echo "  <th>ReleaseDate</th>\n";
+    echo "  <th>EndDate</th>\n";
+    echo "  <th>MaturityRating</th>\n";
     echo "  </tr>\n";
     echo "</thead>\n";
     echo "<tbody>\n";
@@ -35,30 +37,32 @@ function output_table_close(){
     echo "</div>";
 
 }
-function output_person_row($name, $age, $gender){
+function output_show_row($showid, $title, $releasedate, $enddate, $maturityrating){
     //will output row based on input
-    echo "<tr class='table-primary PizzaDataRow'>\n";
-    echo "  <td class='fw-bold'>" . $name . "</td>\n";
-    echo "  <td>" . $age . "</td>\n";
-    echo "  <td>" . $gender . "</td>\n";
+    echo "<tr class='table-primary ShowDataRow'>\n";
+    echo "  <td class='fw-bold'>" . $showid . "</td>\n";
+    echo "  <td>" . $title . "</td>\n";
+    echo "  <td>" . $releasedate . "</td>\n";
+    echo "  <td>" . $enddate . "</td>\n";
+    echo "  <td>" . $maturityrating . "</td>\n";
     echo "</tr>\n";
 }
 
-function output_person_details_row ($pizzas, $pizzerias){
-    $pizza_str = "None";
-    $pizzerias_str = "None";
-    if(sizeof($pizzas) > 0){
-        $pizza_str = implode(",", $pizzas);
+function output_person_details_row ($people, $episodes){
+    $people_str = "None";
+    $episode_str = "None";
+    if(sizeof($people) > 0){
+        $people_str = implode("\n", $people);
 
     }
-    if(sizeof($pizzerias) > 0){
-        $pizzeria_str = implode(",", $pizzerias);
+    if(sizeof($episodes) > 0){
+        $episode_str = implode("\n", $episodes);
     }
 
     echo "<tr>\n";
     echo "  <td colspan='3' class='ps-5'>\n";
-    echo "      Pizzas Eaten: " . $pizza_str . "</br>\n";
-    echo "      Pizzerias Frequented: " . $pizzerias_str . "</br>\n";
+    echo "      People Involved: " . $people_str . "</br>\n";
+    echo "      Episodes: " . $episode_str . "</br>\n";
     echo "  </td>\n";
     echo "</tr>\n";
 }
@@ -87,10 +91,12 @@ include('components/_header.php');
     }
     else{
         try {
-            $query = " SELECT t0.name, t0.age, t0.gender, t1.pizza, t2. pizzeria"
-                . " FROM person t0"
-                . " LEFT OUTER JOIN eats t1 ON t0.name = t1.name"
-                . " LEFT OUTER JOIN frequents t2 on t0.name = t2.name";
+            $query = " SELECT t0.showID, t0.title, t0.releaseDate, t0.endDate, t0.maturityRating,"
+                    . " t1.personid, t1.showid, t1.name, t1.role, "
+                    . " t2.episodeid, t2.seasonNumber, t2.episodeNumber, t2.episodeTitle"
+                . " FROM show t0"
+                . " LEFT OUTER JOIN person t1 ON t0.showID = t1.showID"
+                . " LEFT OUTER JOIN episode t2 on t0.showID = t2.showID";
 
 
             // example of user input:      . " WHERE t0.name = '" . $userSelectedName . "'"
@@ -117,30 +123,42 @@ include('components/_header.php');
     }
     if(!empty($final_data)){
             output_table_open();
-            $last_name = null; //as in last/previous name not your last name
-            $pizzas = array();
-            $pizzerias = array();
+            $last_show = null; //as in last/previous name not your last name
+            $people = array();
+            $episodes = array();
             foreach ($final_data as $row) {
-            if ($last_name != $row['name']) {
-                if ($last_name != null) {
+                $ep = array();
+                $p = array();
+            if ($last_show != $row["showid"]) {
+                if ($last_show != null) {
                     output_person_details_row($pizzas, $pizzerias);
                 }
-                output_person_row($row['name'], $row['age'], $row['gender']);
-                $pizzas = array();
-                $pizzerias = array();
+                output_show_row($row["showid"], $row["title"], $row["releasedate"], $row["enddate"], $row["maturityrating"]);
+                $p = array();
+                $ep = array();
             }
 
-            if (!empty($row['pizza']) && !in_array($row['pizza'], $pizzas)) {
-                $pizzas[] = $row['pizza'];
+            if (!empty($row["personid"]) && !in_array($row["personid"], $people)) {
+                $person_str = "";
+                if(sizeof($p) > 0){
+                    $person_str = implode(" ", $p);
+
+                }
+                $people[] = $person_str;
             }
-            if (!empty($row['pizzeria']) && !in_array($row['pizzeria'], $pizzerias)) {
-                $pizzerias[] = $row['pizzeria'];
+            if (!empty($row["episodeid"]) && !in_array($row["episodeid"], $episode)) {
+                $episode_str = "";
+                if(sizeof($ep) > 0){
+                    $episode_str = implode(" ", $ep);
+
+                }
+                $episode[] = $episode_str;
             }
-            $last_name = $row['name'];
+            $last_show = $row["showid"];
         }
 
-        if ($last_name != null) {
-            output_person_details_row($pizzas, $pizzerias);
+        if ($last_show != null) {
+            output_person_details_row($people, $episodes);
         }
         output_table_close();
 
