@@ -1,0 +1,27 @@
+html {
+    overscroll-behavior: none;
+}
+
+.header {
+    background-color: #f6c700;
+    height: 10%;
+}
+
+.header li {
+    align-content: center;
+    font-size: 150%;
+    margin-left: 1em;
+    margin-right: 1em;
+}
+
+.left {
+    justify-content: right;
+}
+
+a {
+    color: black !important;
+}
+
+.logo {
+    height: 75%;
+}
