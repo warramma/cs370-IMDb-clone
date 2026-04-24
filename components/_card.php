@@ -1,6 +1,6 @@
 <!--db names are temporary-->
 <div class="card">
-    <img src="<?=htmlspecialchars($image) ?>" alt="Avatar" style="width:100%"
+    <img src="<?=htmlspecialchars($image) ?>" alt="Avatar" onerror="this.onerror=null; this.src='assets/lalalalava.jpg';" style="width:100%"
     <div class="card-header">
         <h2>Card Title</h2>
 </div>
