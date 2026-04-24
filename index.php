@@ -6,4 +6,6 @@
     </div>
 </div>
 
+
+
 <?php include_once("components/_footer.php"); ?>
