@@ -27,10 +27,16 @@ a {
 }
 
 .card {
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.4);
     transition: box-shadow 0.5s;
-    width: 300px;
+    width: 250px;
     border-radius: 5px;
+}
+
+.card img {
+    width: 160px;
+    height: 160px;
+    object-fit: cover;
 }
 
 .card:hover {
@@ -38,5 +44,11 @@ a {
 }
 
 .container {
-    padding: 2px 16px;
+    padding: 2px 4px;
+}
+
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
 }
