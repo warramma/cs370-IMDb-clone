@@ -36,40 +36,13 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `imdb_db`.`ProductionCompany` ;
 
-CREATE TABLE IF NOT EXISTS `imdb_db`.`ProductionCompany`
-(
-    `ProductionCompanyID`
-    INT
-    NOT
-    NULL
-    AUTO_INCREMENT,
-    `CompanyName`
-    VARCHAR
-(
-    100
-) NOT NULL,
-    `Headquarters` VARCHAR
-(
-    100
-) NOT NULL,
-    `Founded Date` DATE NOT NULL,
-    PRIMARY KEY
-(
-    `ProductionCompanyID`
-),
-    UNIQUE INDEX `ProductionCompanyID_UNIQUE`
-(
-    `ProductionCompanyID`
-    ASC
-) VISIBLE,
-    UNIQUE INDEX `CompanyName_UNIQUE`
-(
-    `CompanyName`
-    ASC
-) VISIBLE
-    )
-ENGINE = InnoDB;
-
+CREATE TABLE IF NOT EXISTS `imdb_db`.`ProductionCompany` (
+    `ProductionCompanyID` INT NOT NULL AUTO_INCREMENT,
+    `CompanyName` VARCHAR(100) NOT NULL,
+    `Headquarters` VARCHAR(100) NOT NULL,
+    `Founded Date` DATE NULL,
+    PRIMARY KEY (`ProductionCompanyID`)
+    ) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `imdb_db`.`Genre`
