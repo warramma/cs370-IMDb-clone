@@ -16,15 +16,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $connection_error = true;
         $connection_error_message = "Error connecting to the database: " . mysqli_connect_error();
     }
-
     //check for username in the database
     //grab the password hash from the database
-    $hash = mysqli_query($con, "SELECT PasswordHash FROM User WHERE Username = '$user'");
+    $hash = (mysqli_query($con, "SELECT PasswordHash FROM User WHERE Username = '$user'"))->fetch_assoc()["PasswordHash"];
 
-//    $admin = password_hash("admin", PASSWORD_BCRYPT);
-//    echo $admin;
-//    echo "<br>";
-//    $enteredPassword = 'admin';
     if (password_verify($pass, $hash)) {
         echo 'Password is valid!';
     } else {
