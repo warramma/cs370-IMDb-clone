@@ -86,12 +86,16 @@ include('components/_header.php');
         <?php endif; ?>
     <?php endif; ?>
     <h1>Import User-Production-Language Data</h1>
+    <p>Expected headers:</p>
+    <code>RecordType, Content</code>
+    <br><br>
     <form method="post" enctype="multipart/form-data">
         <div class="input-group md-3">
             <span class="input-group-text">File:</span>
-            <input class="form-control" type="file" name="importFile"/>
+            <input class="form-control" type="file" name="importFile" accept=".csv" required/>
         </div>
-        <input type="submit" value="Upload Data"/>
+        <br>
+        <input type="submit" value="Upload Data" class="btn btn-primary"/>
     </form>
 </div>
 <?php
