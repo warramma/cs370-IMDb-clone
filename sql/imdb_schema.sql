@@ -79,7 +79,7 @@ DROP TABLE IF EXISTS `imdb_db`.`Genre` ;
 CREATE TABLE IF NOT EXISTS `imdb_db`.`Genre` (
   `GenreID` INT NOT NULL AUTO_INCREMENT,
   `Name` VARCHAR(100) NOT NULL,
-  `Description` VARCHAR(160) NULL,
+  `Description` VARCHAR(500) NULL,
   PRIMARY KEY (`GenreID`),
   UNIQUE INDEX `GenreID_UNIQUE` (`GenreID` ASC) VISIBLE,
   UNIQUE INDEX `Name_UNIQUE` (`Name` ASC) VISIBLE)
