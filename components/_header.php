@@ -1,6 +1,6 @@
 <html lang="en">
 <head>
-    <title><?php echo isset($pageTitle) ? $pageTitle : "Pizza Database";?></title>
+    <title><?php echo isset($pageTitle) ? $pageTitle : "IMDB Pirated";?></title>
     <link href="css/bootstrap.css" rel="stylesheet"/>
     <link href="css/style.css" rel="stylesheet">
     <script src="js/bootstrap.bundle.js"></script>
