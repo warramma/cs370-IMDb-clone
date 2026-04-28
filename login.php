@@ -1,8 +1,11 @@
 <?php include_once("components/_header.php"); ?>
 <?php
+    $pass_valid = False;
+    $tries = 0;
     //login logic
 if($_SERVER["REQUEST_METHOD"] == "POST"){
     //get data from the form
+    $tries += 1;
     $user = $_POST["username"];
     $pass = $_POST["password"];
     //check for database connection
@@ -21,25 +24,28 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $hash = (mysqli_query($con, "SELECT PasswordHash FROM User WHERE Username = '$user'"))->fetch_assoc()["PasswordHash"];
 
     if (password_verify($pass, $hash)) {
-        echo 'Password is valid!';
-    } else {
-        echo 'Invalid password.';
+        $pass_valid = True;
+        header("Location: index.php");
     }
 
+
 }
-
-
 //login logic
 ?>
 <div class="container">
     <div class = "p-5 bg-dark">
         <h1>Login</h1>
+        <?php
+            if(!$pass_valid and $tries > 0){
+                echo "<div class='alert alert-danger'>Invalid password!</div>";
+            }
+        ?>
         <form method="post" enctype="multipart/form-data" action="login.php">
-            <div class="input-group md-3">
+            <div class="input-group md-3 p-1">
                 <label class="input-group-text" for="username" >Username:</label>
                 <input id="username" type = "text" name="username"/>
             </div>
-            <div class="input-group md-3">
+            <div class="input-group md-3 p-1">
                 <label class = "input-group-text" for="password">Password:</label>
                 <input id="password" type="password" name="password"/>
             </div>
