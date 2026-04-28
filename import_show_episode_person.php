@@ -14,19 +14,47 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     else{
         try {
             $lines = file($_FILES['importFile']['tmp_name'], FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+            $import_attempted = true;
 
-            echo "<pre>";
+            $stmtShow = $con->prepare("INSERT IGNORE INTO Show (Title, ReleaseDate, EndDate, MaturityRating, ProductionCompanyID, LanguageID, GenreID) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            $stmtEp = $con->prepare("INSERT IGNORE INTO Episode (ShowID, SeasonNumber, EpisodeNumber, EpisodeTitle) VALUES (?, ?, ?, ?)");
+            $stmtPerson = $con->prepare("INSERT IGNORE INTO Person (ShowID, `Role`, `Name`, BornIn, Birthdate) VALUES (?, ?, ?, ?, ?)");
 
-            for($x = 1; $x < count($lines); $x++){
-                $parsed_csv_line = str_getcsv($lines[$x], ",", '"', "");
+            $rows_added = 0;
 
-                if (!empty($parsed_csv_line)) {
-                    echo implode(" | ", $parsed_csv_line) . PHP_EOL;
-                }
+            for ($x = 1; $x < count($lines); $x++) {
+                $row = str_getcsv($lines[$x], ",", '"', "");
+                $showstart = $row[0];
+                $episodestart = $row[12];
+                $personstart = $row[7];
+
+                    if(!empty($showstart)){
+                        // ERD: Show(ShowID, Title, ReleaseDate, EndDate, MaturityRating, ProductionCompanyID, LanguageID, GenreID)
+                        $stmtShow-> bind_param("sssssss", $row[0], $row[1], $row[2], $row[3], $row[4], $row[5], $row[6]); //bind parameters, expecting one string.
+                        $stmtShow->execute();
+                        $rows_added += $stmtShow->affected_rows;
+                    }
+                    if(!empty($episodestart)){
+                        // ERD: Episode(ShowID, EpisodeID, SeasonNumber, EpisodeNumber, EpisodeTitle)
+                        $stmtEp->bind_param("ssss", $row[12], $row[13], $row[14], $row[15]); //bind parameters, type is 3 strings.
+                        $stmtEp->execute();
+                        $rows_added += $stmtShow->affected_rows;
+                    }
+                    if(!empty($personstart)){
+                        // ERD: Person(PersonID, ShowID, MovieID, Role, Name, BornIn, Birthdate)
+                        $stmtPerson->bind_param("sssss", $row[7], $row[8], $row[9], $row[10], $row[11]);
+                        $stmtPerson->execute();
+                        $rows_added += $stmtShow->affected_rows;
+                    }
+
             }
 
-            echo "</pre>";
-            $import_succeeded = true;
+            if ($rows_added == 0) {
+                $import_succeeded = false;
+                $import_error_message = "Invalid File Format: No valid 'Show', 'Episode', or 'Person' records were found. Please check your CSV column structure.";
+            } else {
+                $import_succeeded = true;
+            }
         }
         catch(Error $e){
             $import_error_message = $e->getMessage()
@@ -60,7 +88,13 @@ include('components/_header.php');
         </div>
         <input type="submit" value="Upload Data"/>
     </form>
+    <?php
+    echo "Php is working on playground" ;
+    ?>
 </div>
+<?php
+include("components/_footer.php");
+?>
 <?php
 include("components/_footer.php");
 ?>
