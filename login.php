@@ -29,9 +29,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 }
 
 
+//login logic
 ?>
 <div class="container">
-    <div>
+    <div class = "p-5 bg-dark">
         <h1>Login</h1>
         <form method="post" enctype="multipart/form-data" action="login.php">
             <div class="input-group md-3">
@@ -46,7 +47,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         </form>
     </div>
 
-</div>
+    </div>
 
 
 <?php include_once("components/_footer.php"); ?>

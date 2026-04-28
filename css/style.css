@@ -1,0 +1,61 @@
+@keyframes fade {
+    from { background-color: #f6c700; }
+    to { background-color: #ffffff; }
+}
+
+html {
+    overscroll-behavior: none;
+}
+
+h1 {
+    color: white;
+}
+
+label {
+    color: white;
+}
+
+.header {
+    background-color: #f6c700;
+    height: 10%;
+}
+
+.header li {
+    align-content: center;
+    font-size: 150%;
+    margin-left: 1em;
+    margin-right: 1em;
+}
+
+.size {
+    width: 12%;
+}
+
+.left {
+    border-left: 2px solid black;
+    justify-content: right;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    text-align: center;
+    width: 12%;
+}
+
+.left:hover {
+    animation: fade 0.25s ease-in forwards;
+}
+
+.last {
+    border-right: 2px solid black;
+}
+
+a {
+    color: black !important;
+}
+
+.logo {
+    height: 75%;
+}
+
+.drop {
+    margin: 0 !important;
+}

@@ -60,9 +60,6 @@ include('components/_header.php');
         </div>
         <input type="submit" value="Upload Data"/>
     </form>
-    <?php
-    echo "Php is working on playground" ;
-    ?>
 </div>
 <?php
 include("components/_footer.php");
