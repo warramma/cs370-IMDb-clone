@@ -4,6 +4,8 @@ include("components/_connection.php");
 $import_attempted = false;
 $import_succeeded = false;
 $import_error_message = "";
+$rows_added = 0;
+$invalid_rows = 0;
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
     $import_attempted = true;
@@ -20,12 +22,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             $stmtEp = $con->prepare("INSERT IGNORE INTO Episode (ShowID, SeasonNumber, EpisodeNumber, EpisodeTitle) VALUES (?, ?, ?, ?)");
             $stmtPerson = $con->prepare("INSERT IGNORE INTO Person (ShowID, MovieID, `Role`, `Name`, BornIn, Birthdate) VALUES (?, NULL, ?, ?, ?, ?)");
 
-            $rows_added = 0;
             $show_cache = [];
+            $person_cache = [];
 
             for ($x = 1; $x < count($lines); $x++) {
                 $row = str_getcsv($lines[$x], ",", '"', "");
-                if (empty($row[0])) continue;
+                if (count($row) < 14 || empty($row[0])) {
+                    $invalid_rows++;
+                    continue;
+                }
                 $title = $row[0];
                 $showstart = $row[0];
                 $episodestart = $row[13];
@@ -44,30 +49,41 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             $stmtShow->bind_param("ssssiii", $row[0], $row[1], $endDate, $row[3], $row[4], $row[5], $row[6]);
                             $stmtShow->execute();
                             $show_cache[$title] = $con->insert_id;
-                            $rows_added++;
+                            $rows_added += $stmtShow->affected_rows;
                         }
 //                        $stmtShow-> bind_param("sssssss", $row[0], $row[1], $row[2], $row[3], $row[4], $row[5], $row[6]); //bind parameters, expecting one string.
 //                        $stmtShow->execute();
 
-                        $rows_added += $stmtShow->affected_rows;
                     }
                     $currentShowID = $show_cache[$title];
-                    if(!empty($episodestart)){
-                        // ERD: Episode(ShowID, EpisodeID, SeasonNumber, EpisodeNumber, EpisodeTitle)
-                        $stmtEp->bind_param("iiis", $currentShowID, $row[11], $row[12], $row[13]); //bind parameters, type is 3 strings.
-                        $stmtEp->execute();
-                        $rows_added += $stmtShow->affected_rows;
+                    if($currentShowID > 0){
+                        if(!empty($episodestart)){
+                            // ERD: Episode(ShowID, EpisodeID, SeasonNumber, EpisodeNumber, EpisodeTitle)
+                            $stmtEp->bind_param("iiis", $currentShowID, $row[11], $row[12], $row[13]); //bind parameters, type is 3 strings.
+                            $stmtEp->execute();
+                            $rows_added += $stmtEp->affected_rows;
+                        }
+                        if(!empty($personstart)){
+                            $role = $row[7];
+                            $name = $row[8];
+                            $personKey = $currentShowID . "_" . $role . "_" . $name;
+                            if(!isset($person_cache[$personKey])){
+                                // ERD: Person(PersonID, ShowID, MovieID, Role, Name, BornIn, Birthdate)
+                                $stmtPerson->bind_param("issss", $currentShowID, $row[7], $row[8], $row[9], $row[10]);
+                                $stmtPerson->execute();
+                                $rows_added += $stmtPerson->affected_rows;
+                                $person_cache[$personKey] = $con->insert_id;
+                            }
+
+                        }
+                    }else{
+                        $invalid_rows++;
                     }
-                    if(!empty($personstart)){
-                        // ERD: Person(PersonID, ShowID, MovieID, Role, Name, BornIn, Birthdate)
-                        $stmtPerson->bind_param("issss", $currentShowID, $row[7], $row[8], $row[9], $row[10]);
-                        $stmtPerson->execute();
-                        $rows_added += $stmtShow->affected_rows;
-                    }
+
 
             }
 
-            if ($rows_added == 0) {
+            if ($rows_added == 0 && $invalid_rows > 0 && ($invalid_rows == count($lines) - 1)) {
                 $import_succeeded = false;
                 $import_error_message = "Invalid File Format: No valid 'Show', 'Episode', or 'Person' records were found. Please check your CSV column structure.";
             } else {
@@ -77,20 +93,21 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         catch(Exception $e){
             $import_error_message = $e->getMessage()
                 ." at:" . $e->getFile()." at line ".$e->getLine();
+            $import_succeeded = false;
         }
-        if($import_attempted == true){
-            if($import_succeeded == true){
-                ?>
-                <h1><span style="color:green;">Import Succeeded</span></h1>
-                <?php
-            }else{
-                ?>
-                <h1>Import Failed</h1>
-                <?php echo $import_error_message; ?>
-                <br/>
-                <?php
-            }
-        }
+//        if($import_attempted == true){
+//            if($import_succeeded == true){
+//                ?>
+<!--                <h1><span style="color:green;">Import Succeeded</span></h1>-->
+<!--                --><?php
+//            }else{
+//                ?>
+<!--                <h1>Import Failed</h1>-->
+<!--                --><?php //echo $import_error_message; ?>
+<!--                <br/>-->
+<!--                --><?php
+//            }
+//        }
     }
 }
 $pageTitle = "Import Show Data";
@@ -98,6 +115,23 @@ $pageTitle = "Import Show Data";
 include('components/_header.php');
 ?>
 <div class="container">
+    <?php if($import_attempted): ?>
+        <?php if($import_succeeded): ?>
+            <br>
+            <div class="alert alert-success">
+                <?php if($rows_added > 0): ?>
+                    Imported <?php echo $rows_added; ?> new records successfully.
+                <?php else: ?>
+                    The file was processed, but all records already existed in the database (0 new rows added).
+                <?php endif; ?>
+            </div>
+        <?php else: ?>
+            <br>
+            <div class="alert alert-danger">
+                <strong>Import Failed:</strong> <?php echo htmlspecialchars($import_error_message); ?>
+            </div>
+        <?php endif; ?>
+    <?php endif; ?>
     <h1>Import Show Data</h1>
     <p>Expected headers:</p>
     <code>Title, ReleaseDate, EndDate, MaturityRating, ProductionCompanyID, LanguageID, GenreID, Role, Name,

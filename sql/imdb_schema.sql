@@ -41,7 +41,8 @@ CREATE TABLE IF NOT EXISTS `imdb_db`.`ProductionCompany` (
     `CompanyName` VARCHAR(100) NOT NULL,
     `Headquarters` VARCHAR(100) NOT NULL,
     `Founded Date` DATE NULL,
-    PRIMARY KEY (`ProductionCompanyID`)
+    PRIMARY KEY (`ProductionCompanyID`),
+    UNIQUE INDEX `CompanyName_UNIQUE` (`CompanyName` ASC) VISIBLE
     ) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
@@ -113,6 +114,7 @@ CREATE TABLE IF NOT EXISTS `imdb_db`.`Show` (
   `GenreID` INT NOT NULL,
   PRIMARY KEY (`ShowID`),
   UNIQUE INDEX `ShowID_UNIQUE` (`ShowID` ASC) VISIBLE,
+  UNIQUE INDEX `Title_UNIQUE` (`Title` ASC) VISIBLE,
   INDEX `idx_show_title` (`Title` ASC) VISIBLE,
   INDEX `fk_show_productioncompany_idx` (`ProductionCompanyID` ASC) VISIBLE,
   INDEX `fk_show_language_idx` (`LanguageID` ASC) VISIBLE,
@@ -150,6 +152,7 @@ CREATE TABLE IF NOT EXISTS `imdb_db`.`Person` (
   `Birthdate` DATE NOT NULL,
   PRIMARY KEY (`PersonID`),
   UNIQUE INDEX `PersonID_UNIQUE` (`PersonID` ASC) VISIBLE,
+  UNIQUE INDEX `uq_person_identity` (`ShowID`, `Role`, `Name`) VISIBLE,
   INDEX `fk_show_person_idx` (`ShowID` ASC) VISIBLE,
   INDEX `fk_movie_person_idx` (`MovieID` ASC) VISIBLE,
   CONSTRAINT `fk_show_person`
@@ -346,6 +349,7 @@ CREATE TABLE IF NOT EXISTS `imdb_db`.`Episode` (
   `EpisodeTitle` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`EpisodeID`, `ShowID`),
   UNIQUE INDEX `EpisodeID_UNIQUE` (`EpisodeID` ASC) VISIBLE,
+  UNIQUE INDEX `uq_episode_identity` (`ShowID`, `SeasonNumber`, `EpisodeNumber`) VISIBLE,
   INDEX `fk_episode_show_idx` (`ShowID` ASC) VISIBLE,
   CONSTRAINT `fk_show_episode`
     FOREIGN KEY (`ShowID`)

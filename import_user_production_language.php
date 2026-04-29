@@ -37,13 +37,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     // ERD: Production Company(Production CompanyID, CompanyName, Headquarters, FoundedDate)
                     $stmtProd->bind_param("sss", $row[1], $row[2], $row[3]); //bind parameters, type is 3 strings.
                     $stmtProd->execute();
-                    $rows_added += $stmtLang->affected_rows;
+                    $rows_added += $stmtProd->affected_rows;
                 }
                 elseif ($type == 'User') {
                     // ERD: User(UserID, Username, PasswordHash, Join Date, Email, Birthdate)
                     $stmtUser->bind_param("sssss", $row[1], $row[2], $row[3], $row[4], $row[5]);
                     $stmtUser->execute();
-                    $rows_added += $stmtLang->affected_rows;
+                    $rows_added += $stmtUser->affected_rows;
                 }
                 else {
                     // This row didn't match any known RecordType
@@ -72,6 +72,7 @@ include('components/_header.php');
 <div class="container">
     <?php if($import_attempted): ?>
         <?php if($import_succeeded): ?>
+            <br>
             <div class="alert alert-success">
                 <?php if($rows_added > 0): ?>
                     Imported <?php echo $rows_added; ?> new records successfully.
@@ -80,6 +81,7 @@ include('components/_header.php');
                 <?php endif; ?>
             </div>
         <?php else: ?>
+        <br>
             <div class="alert alert-danger">
                 <strong>Import Failed:</strong> <?php echo htmlspecialchars($import_error_message); ?>
             </div>
