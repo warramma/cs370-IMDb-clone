@@ -15,34 +15,52 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         try {
             $lines = file($_FILES['importFile']['tmp_name'], FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
             $import_attempted = true;
-
-            $stmtShow = $con->prepare("INSERT IGNORE INTO Show (Title, ReleaseDate, EndDate, MaturityRating, ProductionCompanyID, LanguageID, GenreID) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            $stmtGetShow = $con->prepare("SELECT ShowID FROM `Show` WHERE Title = ?");
+            $stmtShow = $con->prepare("INSERT IGNORE INTO `Show` (Title, ReleaseDate, EndDate, MaturityRating, ProductionCompanyID, LanguageID, GenreID) VALUES (?, ?, ?, ?, ?, ?, ?)");
             $stmtEp = $con->prepare("INSERT IGNORE INTO Episode (ShowID, SeasonNumber, EpisodeNumber, EpisodeTitle) VALUES (?, ?, ?, ?)");
-            $stmtPerson = $con->prepare("INSERT IGNORE INTO Person (ShowID, `Role`, `Name`, BornIn, Birthdate) VALUES (?, ?, ?, ?, ?)");
+            $stmtPerson = $con->prepare("INSERT IGNORE INTO Person (ShowID, MovieID, `Role`, `Name`, BornIn, Birthdate) VALUES (?, NULL, ?, ?, ?, ?)");
 
             $rows_added = 0;
+            $show_cache = [];
 
             for ($x = 1; $x < count($lines); $x++) {
                 $row = str_getcsv($lines[$x], ",", '"', "");
+                if (empty($row[0])) continue;
+                $title = $row[0];
                 $showstart = $row[0];
-                $episodestart = $row[12];
-                $personstart = $row[7];
+                $episodestart = $row[13];
+                $personstart = $row[8];
 
-                    if(!empty($showstart)){
+                    if(!isset($show_cache[$title])){
                         // ERD: Show(ShowID, Title, ReleaseDate, EndDate, MaturityRating, ProductionCompanyID, LanguageID, GenreID)
-                        $stmtShow-> bind_param("sssssss", $row[0], $row[1], $row[2], $row[3], $row[4], $row[5], $row[6]); //bind parameters, expecting one string.
-                        $stmtShow->execute();
+                        $stmtGetShow->bind_param("s", $title);
+                        $stmtGetShow->execute();
+                        $result = $stmtGetShow->get_result();
+
+                        if ($result->num_rows > 0) {
+                            $show_cache[$title] = $result->fetch_assoc()['ShowID'];
+                        }else{
+                            $endDate = !empty($row[2]) ? $row[2] : null;
+                            $stmtShow->bind_param("ssssiii", $row[0], $row[1], $endDate, $row[3], $row[4], $row[5], $row[6]);
+                            $stmtShow->execute();
+                            $show_cache[$title] = $con->insert_id;
+                            $rows_added++;
+                        }
+//                        $stmtShow-> bind_param("sssssss", $row[0], $row[1], $row[2], $row[3], $row[4], $row[5], $row[6]); //bind parameters, expecting one string.
+//                        $stmtShow->execute();
+
                         $rows_added += $stmtShow->affected_rows;
                     }
+                    $currentShowID = $show_cache[$title];
                     if(!empty($episodestart)){
                         // ERD: Episode(ShowID, EpisodeID, SeasonNumber, EpisodeNumber, EpisodeTitle)
-                        $stmtEp->bind_param("ssss", $row[12], $row[13], $row[14], $row[15]); //bind parameters, type is 3 strings.
+                        $stmtEp->bind_param("iiis", $currentShowID, $row[11], $row[12], $row[13]); //bind parameters, type is 3 strings.
                         $stmtEp->execute();
                         $rows_added += $stmtShow->affected_rows;
                     }
                     if(!empty($personstart)){
                         // ERD: Person(PersonID, ShowID, MovieID, Role, Name, BornIn, Birthdate)
-                        $stmtPerson->bind_param("sssss", $row[7], $row[8], $row[9], $row[10], $row[11]);
+                        $stmtPerson->bind_param("issss", $currentShowID, $row[7], $row[8], $row[9], $row[10]);
                         $stmtPerson->execute();
                         $rows_added += $stmtShow->affected_rows;
                     }
@@ -56,7 +74,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 $import_succeeded = true;
             }
         }
-        catch(Error $e){
+        catch(Exception $e){
             $import_error_message = $e->getMessage()
                 ." at:" . $e->getFile()." at line ".$e->getLine();
         }
@@ -82,7 +100,8 @@ include('components/_header.php');
 <div class="container">
     <h1>Import Show Data</h1>
     <p>Expected headers:</p>
-    <code>Insert expected headers here</code>
+    <code>Title, ReleaseDate, EndDate, MaturityRating, ProductionCompanyID, LanguageID, GenreID, Role, Name,
+    BornIn, Birthdate, SeasonNumber, EpisodeNumber, EpisodeTitle</code>
     <br><br>
     <form method="post" enctype="multipart/form-data">
         <div class="input-group md-3">

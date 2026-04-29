@@ -113,6 +113,7 @@ CREATE TABLE IF NOT EXISTS `imdb_db`.`Show` (
   `GenreID` INT NOT NULL,
   PRIMARY KEY (`ShowID`),
   UNIQUE INDEX `ShowID_UNIQUE` (`ShowID` ASC) VISIBLE,
+  INDEX `idx_show_title` (`Title` ASC) VISIBLE,
   INDEX `fk_show_productioncompany_idx` (`ProductionCompanyID` ASC) VISIBLE,
   INDEX `fk_show_language_idx` (`LanguageID` ASC) VISIBLE,
   INDEX `fk_show_genre_idx` (`GenreID` ASC) VISIBLE,
