@@ -16,7 +16,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             $lines = file($_FILES['importFile']['tmp_name'], FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
             $import_attempted = true;
 
-            $stmtShow = $con->prepare("INSERT IGNORE INTO Show (Title, ReleaseDate, EndDate, MaturityRating, ProductionCompanyID, LanguageID, GenreID) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            $stmtShow = $con->prepare("INSERT IGNORE INTO `Show` (Title, ReleaseDate, EndDate, MaturityRating, ProductionCompanyID, LanguageID, GenreID) VALUES (?, ?, ?, ?, ?, ?, ?)");
             $stmtEp = $con->prepare("INSERT IGNORE INTO Episode (ShowID, SeasonNumber, EpisodeNumber, EpisodeTitle) VALUES (?, ?, ?, ?)");
             $stmtPerson = $con->prepare("INSERT IGNORE INTO Person (ShowID, `Role`, `Name`, BornIn, Birthdate) VALUES (?, ?, ?, ?, ?)");
 
