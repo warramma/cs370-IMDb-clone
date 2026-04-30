@@ -1,0 +1,100 @@
+Name,Description,GenreID,MovieID,MovieTitle,ReleaseDate,Runtime,Revenue,MaturityRating,ProductionCompanyID,LanguageID,SoundtrackID,SoundtrackTitle,Composer,Length
+Drama,"The drama genre is defined by conflict and often looks to reality rather than sensationalism. Emotions and intense situations are the focus, but where other genres might use unique or exciting moments to create a feeling, movies in the drama genre focus on common occurrences.",,,The Shawshank Redemption,1994,2:22:00,28884504,R,0,1,,If I Didn't Care,The Ink Spots,110
+Crime,The crime genre deals with both sides of the criminal justice system but does not focus on legislative matters or civil suits and legal actions.,,,The Godfather,1972,2:55:00,250000000,R,3,1,,The Godfather Waltz,Nino Rota,175
+Action,"Movies in the action genre are defined by risk and stakes. While many movies may feature an action sequence, to be appropriately categorized inside the action genre, the bulk of the content must be action-oriented, including fight scenes, stunts, car chases, and general danger.",,,The Dark Knight,2008,2:32:00,1005973645,PG-13,1,1,,Why So Serious?,Hans Zimmer & James Newton Howard,152
+Crime,The crime genre deals with both sides of the criminal justice system but does not focus on legislative matters or civil suits and legal actions.,,,The Godfather Part II,1974,3:22:00,47961919,R,3,1,,Main Theme,Nino Rota,180
+Drama,"The drama genre is defined by conflict and often looks to reality rather than sensationalism. Emotions and intense situations are the focus, but where other genres might use unique or exciting moments to create a feeling, movies in the drama genre focus on common occurrences.",,,12 Angry Men,1957,1:36:00,955,Approved,0,1,,12 Angry Men Suite,Kenyon Hopkins,95
+Drama,"The drama genre is defined by conflict and often looks to reality rather than sensationalism. Emotions and intense situations are the focus, but where other genres might use unique or exciting moments to create a feeling, movies in the drama genre focus on common occurrences.",,,Schindler's List,1993,3:15:00,322161245,R,0,1,,Theme from Schindler's List,John Williams,200
+Fantasy,"The fantasy genre is defined by both circumstance and setting inside a fictional universe with an unrealistic set of natural laws. The possibilities of fantasy are nearly endless, but the movies will often be inspired by human myths. The genre often adheres to general human psychology and societal behavior while incorporating non-scientific concepts like magic, mythical creatures, and supernatural elements.",,,The Lord of the Rings: The Return of the King,2003,3:21:00,1146030912,PG-13,14,1,,Into the West,Howard Shore,330
+Crime,The crime genre deals with both sides of the criminal justice system but does not focus on legislative matters or civil suits and legal actions.,,,Pulp Fiction,1994,2:34:00,213928762,R,13,1,,Misirlou,Dick Dale,140
+Fantasy,"The fantasy genre is defined by both circumstance and setting inside a fictional universe with an unrealistic set of natural laws. The possibilities of fantasy are nearly endless, but the movies will often be inspired by human myths. The genre often adheres to general human psychology and societal behavior while incorporating non-scientific concepts like magic, mythical creatures, and supernatural elements.",,,The Lord of the Rings: The Fellowship of the Ring,2001,2:58:00,898204420,PG-13,14,1,,The Bridge of Khazad-dum,Howard Shore,300
+Western,"Westerns are defined by their setting and time period. The story needs to take place in the American West, which begins as far east as Missouri and extends to the Pacific ocean. They're set during the 19th century, and will often feature horse riding, military expansion, violent and non-violent interaction with Native American tribes, the creation of railways, gunfights, and technology created during the industrial revolution.",,,"The Good, the Bad and the Ugly",1966,2:58:00,25253887,Approved,0,1,,The Ecstasy of Gold,Ennio Morricone,210
+Drama,"The drama genre is defined by conflict and often looks to reality rather than sensationalism. Emotions and intense situations are the focus, but where other genres might use unique or exciting moments to create a feeling, movies in the drama genre focus on common occurrences.",,,Forrest Gump,1994,2:22:00,678226465,PG-13,3,1,,Feather Theme,Alan Silvestri,145
+Drama,"The drama genre is defined by conflict and often looks to reality rather than sensationalism. Emotions and intense situations are the focus, but where other genres might use unique or exciting moments to create a feeling, movies in the drama genre focus on common occurrences.",,,Fight Club,1999,2:19:00,101218804,R,12,1,,Where Is My Mind?,Pixies,240
+Fantasy,"The fantasy genre is defined by both circumstance and setting inside a fictional universe with an unrealistic set of natural laws. The possibilities of fantasy are nearly endless, but the movies will often be inspired by human myths. The genre often adheres to general human psychology and societal behavior while incorporating non-scientific concepts like magic, mythical creatures, and supernatural elements.",,,The Lord of the Rings: The Two Towers,2002,2:59:00,947896241,PG-13,14,1,,Gollum's Song,Howard Shore,310
+Science Fiction,"Science fiction movies are defined by a mixture of speculation and science. While fantasy will explain through or make use of magic and mysticism, science fiction will use the changes and trajectory of technology and science. Science fiction will often incorporate space, biology, energy, time, and any other observable science.",,,Inception,2010,2:28:00,836848102,PG-13,1,1,,Time,Hans Zimmer,275
+Science Fiction,"Science fiction movies are defined by a mixture of speculation and science. While fantasy will explain through or make use of magic and mysticism, science fiction will use the changes and trajectory of technology and science. Science fiction will often incorporate space, biology, energy, time, and any other observable science.",,,Star Wars: Episode V - The Empire Strikes Back,1980,2:04:00,538375067,PG,9,1,,The Imperial March,John Williams,180
+Science Fiction,"Science fiction movies are defined by a mixture of speculation and science. While fantasy will explain through or make use of magic and mysticism, science fiction will use the changes and trajectory of technology and science. Science fiction will often incorporate space, biology, energy, time, and any other observable science.",,,The Matrix,1999,2:16:00,467222728,R,1,1,,Clubbed to Death,Rob Dougan,450
+Crime,The crime genre deals with both sides of the criminal justice system but does not focus on legislative matters or civil suits and legal actions.,,,Goodfellas,1990,2:25:00,46836394,R,1,1,,Rags to Riches,Tony Bennett,165
+Drama,"The drama genre is defined by conflict and often looks to reality rather than sensationalism. Emotions and intense situations are the focus, but where other genres might use unique or exciting moments to create a feeling, movies in the drama genre focus on common occurrences.",,,One Flew Over the Cuckoo's Nest,1975,2:13:00,108981275,18+,0,1,,Main Title,Jack Nitzsche,120
+Thriller,"A thriller story is mostly about the emotional purpose, which is to elicit strong emotions, mostly dealing with generating suspense and anxiety. No matter what the specific plot, the best thrillers get your heart racing.",,,Se7en,1995,2:07:00,327311859,R,14,1,,Closer (Precursor),Nine Inch Nails,240
+Action,"Movies in the action genre are defined by risk and stakes. While many movies may feature an action sequence, to be appropriately categorized inside the action genre, the bulk of the content must be action-oriented, including fight scenes, stunts, car chases, and general danger.",,,Seven Samurai,1954,3:27:00,346258,Not Rated,0,1,,Kanbei & Katsushiro,Fumio Hayasaka,210
+Drama,"The drama genre is defined by conflict and often looks to reality rather than sensationalism. Emotions and intense situations are the focus, but where other genres might use unique or exciting moments to create a feeling, movies in the drama genre focus on common occurrences.",,,It's a Wonderful Life,1946,2:10:00,8574081,PG,0,1,,Buffalo Gals,Dimitri Tiomkin,180
+Thriller,"A thriller story is mostly about the emotional purpose, which is to elicit strong emotions, mostly dealing with generating suspense and anxiety. No matter what the specific plot, the best thrillers get your heart racing.",,,The Silence of the Lambs,1991,1:58:00,272742922,R,0,1,,Main Title,Howard Shore,210
+Crime,The crime genre deals with both sides of the criminal justice system but does not focus on legislative matters or civil suits and legal actions.,,,City of God,2002,2:10:00,30680793,R,0,1,,Opening Theme,Antonio Pinto,180
+War,"Movies in the war genre center around large scale conflicts between opposing forces inside a universe that shares the same natural laws as our own. War movies can be historical accounts, fictionalized events, or future speculations that incorporate civilian interaction, political interaction, and espionage that takes place alongside a large scale, violent conflict.",,,Saving Private Ryan,1998,2:49:00,481840909,R,15,1,,Hymn to the Fallen,John Williams,360
+Science Fiction,"Science fiction movies are defined by a mixture of speculation and science. While fantasy will explain through or make use of magic and mysticism, science fiction will use the changes and trajectory of technology and science. Science fiction will often incorporate space, biology, energy, time, and any other observable science.",,,Interstellar,2014,2:49:00,773896560,PG-13,3,1,,No Time for Caution,Hans Zimmer,240
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,

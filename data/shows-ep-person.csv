@@ -1,0 +1,33 @@
+Title,ReleaseDate,EndDate,MaturityRating,ProductionCompanyID,LanguageID,GenreID,Role,Name,BornIn,Birthdate,SeasonNumber,EpisodeNumber,EpisodeTitle
+The Sopranos,1999,2007-06-10,TV-MA,2,1,5,Tony Soprano,James Gandolfini,"Westwood, NJ",1961-09-18,1,1,Pilot
+The Sopranos,1999,2007-06-10,TV-MA,2,1,5,Creator,David Chase,"Mount Vernon, NY",1945-08-22,1,1,Pilot
+The Sopranos,1999,2007-06-10,TV-MA,2,1,5,Tony Soprano,James Gandolfini,"Westwood, NJ",1961-09-18,3,11,Pine Barrens
+The Sopranos,1999,2007-06-10,TV-MA,2,1,5,Creator,David Chase,"Mount Vernon, NY",1945-08-22,3,11,Pine Barrens
+The Sopranos,1999,2007-06-10,TV-MA,2,1,5,Tony Soprano,James Gandolfini,"Westwood, NJ",1961-09-18,6,21,Made in America
+The Sopranos,1999,2007-06-10,TV-MA,2,1,5,Creator,David Chase,"Mount Vernon, NY",1945-08-22,6,21,Made in America
+Breaking Bad,2008,2013-09-29,TV-MA,1,1,4,Walter White,Bryan Cranston,"Hollywood, CA",1956-03-07,1,1,Pilot
+Breaking Bad,2008,2013-09-29,TV-MA,1,1,4,Jesse Pinkman,Aaron Paul,"Emmett, ID",1979-08-27,1,1,Pilot
+Breaking Bad,2008,2013-09-29,TV-MA,1,1,4,Walter White,Bryan Cranston,"Hollywood, CA",1956-03-07,4,13,Face Off
+Breaking Bad,2008,2013-09-29,TV-MA,1,1,4,Jesse Pinkman,Aaron Paul,"Emmett, ID",1979-08-27,4,13,Face Off
+Breaking Bad,2008,2013-09-29,TV-MA,1,1,4,Walter White,Bryan Cranston,"Hollywood, CA",1956-03-07,5,14,Ozymandias
+Breaking Bad,2008,2013-09-29,TV-MA,1,1,4,Jesse Pinkman,Aaron Paul,"Emmett, ID",1979-08-27,5,14,Ozymandias
+Stranger Things,2016,,TV-14,2,1,11,Eleven,Millie Bobby Brown,"Marbella, Spain",2004-02-19,1,1,Chapter One: The Vanishing of Will Byers
+Stranger Things,2016,,TV-14,2,1,11,Eleven,Millie Bobby Brown,"Marbella, Spain",2004-02-19,4,4,Chapter Four: Dear Billy
+Squid Game,2021,,TV-MA,5,7,12,Seong Gi-hun,Lee Jung-jae,"Seoul, South Korea",1972-12-15,1,1,"Red Light, Green Light"
+Squid Game,2021,,TV-MA,5,7,12,Seong Gi-hun,Lee Jung-jae,"Seoul, South Korea",1972-12-15,1,6,Gganbu
+The Office (US),2005,2013-05-16,TV-PG,3,1,3,Michael Scott,Steve Carell,"Concord, MA",1962-08-16,2,21,Conflict Resolution
+The Office (US),2005,2013-05-16,TV-PG,3,1,3,Dwight Schrute,Rainn Wilson,"Seattle, WA",1966-01-20,2,21,Conflict Resolution
+The Office (US),2005,2013-05-16,TV-PG,3,1,3,Michael Scott,Steve Carell,"Concord, MA",1962-08-16,4,13,Dinner Party
+The Office (US),2005,2013-05-16,TV-PG,3,1,3,Dwight Schrute,Rainn Wilson,"Seattle, WA",1966-01-20,4,13,Dinner Party
+The Office (US),2005,2013-05-16,TV-PG,3,1,3,Michael Scott,Steve Carell,"Concord, MA",1962-08-16,5,14,Stress Relief
+The Office (US),2005,2013-05-16,TV-PG,3,1,3,Dwight Schrute,Rainn Wilson,"Seattle, WA",1966-01-20,5,14,Stress Relief
+Yellowstone,2018,,TV-MA,4,1,1,John Dutton,Kevin Costner,"Lynwood, CA",1955-01-18,1,1,Daybreak
+Yellowstone,2018,,TV-MA,4,1,1,Beth Dutton,Kelly Reilly,"Chessington, England",1977-07-18,3,10,The World is Purple
+The Mandalorian,2019,,TV-PG,10,1,6,The Mandalorian,Pedro Pascal,"Santiago, Chile",1975-04-02,1,1,Chapter 1: The Mandalorian
+The Mandalorian,2019,,TV-PG,10,1,6,Ahsoka Tano,Rosario Dawson,"New York, NY",1979-05-09,2,5,Chapter 13: The Jedi
+Arcane,2021,,TV-14,1,1,3,Vi,Hailee Steinfeld,"Los Angeles, CA",1996-12-11,1,3,The Base Violence Necessary for Change
+Arcane,2021,,TV-14,1,1,3,Jinx,Ella Purnell,"London, England",1996-09-17,1,9,The Monster You Created
+Succession,2018,2023-05-28,TV-MA,2,1,1,Logan Roy,Brian Cox,"Dundee, Scotland",1946-06-01,2,10,This Is Not for Tears
+Succession,2018,2023-05-28,TV-MA,2,1,1,Kendall Roy,Jeremy Strong,"Boston, MA",1978-12-25,4,10,With Open Eyes
+The Bear,2022,,TV-MA,1,1,1,Carmy Berzatto,Jeremy Allen White,"Brooklyn, NY",1991-02-17,2,7,Forks
+The Bear,2022,,TV-MA,1,1,1,Sydney Adamu,Ayo Edebiri,"Boston, MA",1995-10-03,2,6,Fishes
