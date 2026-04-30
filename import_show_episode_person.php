@@ -149,8 +149,8 @@ include('components/_header.php');
             echo "</div>";
         } else {
             echo "<br>";
-            echo "<h2>Import failure</h2>";
             echo "<div class='alert alert-danger' role='alert'>";
+            echo "<h2>Import failure</h2>";
             echo "<p>" . h($import_error_message) . "</p>";
             echo "</div>";
         }
