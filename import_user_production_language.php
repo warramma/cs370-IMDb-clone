@@ -26,9 +26,16 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         try {
             $lines = file($_FILES['importFile']['tmp_name'], FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
-            $stmtLang = $con->prepare("INSERT IGNORE INTO Language (Language) VALUES (?)");
-            $stmtProd = $con->prepare("INSERT IGNORE INTO ProductionCompany (CompanyName, Headquarters, `Founded Date`) VALUES (?, ?, ?)");
-            $stmtUser = $con->prepare("INSERT IGNORE INTO User (`Username`, PasswordHash, `JoinDate`, Email, Birthdate) VALUES (?, ?, ?, ?, ?)");
+            $stmtGetUser = $con->prepare("SELECT UserID FROM User WHERE Username = ?");
+            $stmtInsertUser = $con->prepare("INSERT INTO User (Username, PasswordHash, JoinDate, Email, Birthdate) VALUES (?, ?, ?, ?, ?)");
+            $stmtUpdateUser = $con->prepare("UPDATE User SET PasswordHash=?, JoinDate=?, Email=?, Birthdate=? WHERE UserID=?");
+
+            $stmtGetProd = $con->prepare("SELECT ProductionCompanyID FROM ProductionCompany WHERE CompanyName = ?");
+            $stmtInsertProd = $con->prepare("INSERT INTO ProductionCompany (CompanyName, Headquarters, `Founded Date`) VALUES (?, ?, ?)");
+            $stmtUpdateProd = $con->prepare("UPDATE ProductionCompany SET Headquarters=?, `Founded Date`=? WHERE ProductionCompanyID=?");
+
+            $stmtGetLang = $con->prepare("SELECT LanguageID FROM Language WHERE Language = ?");
+            $stmtInsertLang = $con->prepare("INSERT INTO Language (Language) VALUES (?)");
 
             $valid_type_found = false;
 
@@ -44,31 +51,51 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 if($type == 'Language'){
                     $valid_type_found = True;
                     // ERD: Language(LanguageID, Language)
-                    $stmtLang-> bind_param("s", $row[1]); //bind parameters, expecting one string.
-                    $stmtLang->execute();
-                    if($stmtLang->affected_rows > 0) $rows_inserted++;
-                    else $rows_skipped++;
-
+                    $stmtGetLang-> bind_param("s", $row[1]); //bind parameters, expecting one string.
+                    $stmtGetLang->execute();
+                    if($stmtGetLang->get_result()->num_rows == 0){
+                        $stmtInsertLang->bind_param("s", $row[1]);
+                        $stmtInsertLang->execute();
+                        $rows_inserted++;
+                    } else {
+                        $rows_skipped++;
+                    }
                     $lang_rows_processed++;
                 }
                 elseif ($type == 'Production') {
                     $valid_type_found = True;
                     // ERD: Production Company(Production CompanyID, CompanyName, Headquarters, FoundedDate)
-                    $stmtProd->bind_param("sss", $row[1], $row[2], $row[3]); //bind parameters, type is 3 strings.
-                    $stmtProd->execute();
-                    if($stmtProd->affected_rows > 0) $rows_inserted++;
-                    else $rows_skipped++;
+                    $foundedDate = (!empty($row[3])) ? $row[3] : null;
+                    $stmtGetProd->bind_param("s", $row[1]); //bind parameters, type is 3 strings.
+                    $stmtGetProd->execute();
+                    $res = $stmtGetProd->get_result();
+                    if($existing = $res->fetch_assoc()){
+                    $stmtUpdateProd->bind_param("ssi", $row[2], $foundedDate, $existing['ProductionCompanyID']);
+                    $stmtUpdateProd->execute();
+                    $rows_updated++;
+                } else {
+                        $stmtInsertProd->bind_param("sss", $row[1], $row[2], $foundedDate);
+                        $stmtInsertProd->execute();
+                        $rows_inserted++;
+                    }
 
                     $prod_rows_processed++;
                 }
                 elseif ($type == 'User') {
                     $valid_type_found = True;
                     // ERD: User(UserID, Username, PasswordHash, Join Date, Email, Birthdate)
-                    $stmtUser->bind_param("sssss", $row[1], $row[2], $row[3], $row[4], $row[5]);
-                    $stmtUser->execute();
-                    if($stmtUser->affected_rows > 0) $rows_inserted++;
-                    else $rows_skipped++;
-
+                    $stmtGetUser->bind_param("s", $row[1]);
+                    $stmtGetUser->execute();
+                    $res = $stmtGetUser->get_result();
+                    if($existing = $res->fetch_assoc()){
+                    $stmtUpdateUser->bind_param("ssssi", $row[2], $row[3], $row[4], $row[5], $existing['UserID']);
+                    $stmtUpdateUser->execute();
+                    $rows_updated++;
+                } else {
+                        $stmtInsertUser->bind_param("sssss", $row[1], $row[2], $row[3], $row[4], $row[5]);
+                        $stmtInsertUser->execute();
+                        $rows_inserted++;
+                    }
                     $user_rows_processed++;
                 }
                 else {

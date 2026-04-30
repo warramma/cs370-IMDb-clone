@@ -1,6 +1,7 @@
 <?php
 
 include("components/_connection.php");
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 function h($value) {
     return htmlspecialchars((string)$value, ENT_QUOTES, 'UTF-8');
@@ -27,9 +28,20 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             $lines = file($_FILES['importFile']['tmp_name'], FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
             $import_attempted = true;
             $stmtGetShow = $con->prepare("SELECT ShowID FROM `Show` WHERE Title = ?");
-            $stmtShow = $con->prepare("INSERT IGNORE INTO `Show` (Title, ReleaseDate, EndDate, MaturityRating, ProductionCompanyID, LanguageID, GenreID) VALUES (?, ?, ?, ?, ?, ?, ?)");
-            $stmtEp = $con->prepare("INSERT IGNORE INTO Episode (ShowID, SeasonNumber, EpisodeNumber, EpisodeTitle) VALUES (?, ?, ?, ?)");
-            $stmtPerson = $con->prepare("INSERT IGNORE INTO Person (ShowID, MovieID, `Role`, `Name`, BornIn, Birthdate) VALUES (?, NULL, ?, ?, ?, ?)");
+            $stmtInsertShow = $con->prepare("INSERT INTO `Show` (Title, ReleaseDate, EndDate, MaturityRating, ProductionCompanyID, LanguageID, GenreID) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            $stmtUpdateShow = $con->prepare("UPDATE `Show` SET ReleaseDate=?, EndDate=?, MaturityRating=?, ProductionCompanyID=?, LanguageID=?, GenreID=? WHERE ShowID=?");
+
+            $stmtGetEp = $con->prepare("SELECT EpisodeID FROM Episode WHERE ShowID=? AND SeasonNumber=? AND EpisodeNumber=?");
+            $stmtInsertEp = $con->prepare("INSERT INTO Episode (ShowID, SeasonNumber, EpisodeNumber, EpisodeTitle) VALUES (?, ?, ?, ?)");
+            $stmtUpdateEp = $con->prepare("UPDATE Episode SET EpisodeTitle=? WHERE EpisodeID=?");
+
+            $stmtGetPerson = $con->prepare("SELECT PersonID FROM Person WHERE ShowID=? AND Name=? AND Role=?");
+            $stmtInsertPerson = $con->prepare("INSERT INTO Person (ShowID, MovieID, Role, Name, BornIn, Birthdate) VALUES (?, NULL, ?, ?, ?, ?)");
+            $stmtUpdatePerson = $con->prepare("UPDATE Person SET BornIn=?, Birthdate=? WHERE PersonID=?");
+
+            $checkProd = $con->prepare("SELECT ProductionCompanyID FROM ProductionCompany WHERE ProductionCompanyID = ?");
+            $checkLang = $con->prepare("SELECT LanguageID FROM Language WHERE LanguageID = ?");
+            $checkGenre = $con->prepare("SELECT GenreID FROM Genre WHERE GenreID = ?");
 
             $valid_type_found = false;
             $show_cache = [];
@@ -42,9 +54,27 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     continue;
                 }
                 $title = $row[0];
+                $endDate = !empty($row[2]) ? $row[2] : null;
                 $showstart = $row[0];
                 $episodestart = $row[13];
                 $personstart = $row[8];
+                $prodID = (int)$row[4];
+                $langID = (int)$row[5];
+                $genreID = (int)$row[6];
+
+                $checkProd->bind_param("i", $prodID); $checkProd->execute();
+                $pExists = $checkProd->get_result()->num_rows > 0;
+
+                $checkLang->bind_param("i", $langID); $checkLang->execute();
+                $lExists = $checkLang->get_result()->num_rows > 0;
+
+                $checkGenre->bind_param("i", $genreID); $checkGenre->execute();
+                $gExists = $checkGenre->get_result()->num_rows > 0;
+
+                if (!$pExists || !$lExists || !$gExists) {
+                    $rows_skipped++;
+                    continue;
+                }
 
                     if(!isset($show_cache[$title])){
                         $valid_type_found = true;
@@ -53,20 +83,19 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         $stmtGetShow->execute();
                         $result = $stmtGetShow->get_result();
 
-                        if ($result->num_rows > 0) {
-                            $show_cache[$title] = $result->fetch_assoc()['ShowID'];
-                        }else{
-                            $endDate = !empty($row[2]) ? $row[2] : null;
-                            $stmtShow->bind_param("ssssiii", $row[0], $row[1], $endDate, $row[3], $row[4], $row[5], $row[6]);
-                            $stmtShow->execute();
-                            $show_cache[$title] = $con->insert_id;
-                            if($stmtGetShow->affected_rows > 0) $rows_inserted++;
-                            else $rows_skipped++;
-
-                            $show_rows_processed++;
+                        if ($existingShow = $result->fetch_assoc()) {
+                            $currentShowID = $existingShow['ShowID'];
+                            $stmtUpdateShow->bind_param("sssiiii", $row[1], $endDate, $row[3], $row[4], $row[5], $row[6], $currentShowID);
+                            $stmtUpdateShow->execute();
+                            $rows_updated++;
+                        } else {
+                            $stmtInsertShow->bind_param("ssssiii", $row[0], $row[1], $endDate, $row[3], $row[4], $row[5], $row[6]);
+                            $stmtInsertShow->execute();
+                            $currentShowID = $con->insert_id;
+                            $rows_inserted++;
                         }
-//                        $stmtShow-> bind_param("sssssss", $row[0], $row[1], $row[2], $row[3], $row[4], $row[5], $row[6]); //bind parameters, expecting one string.
-//                        $stmtShow->execute();
+                        $show_cache[$title] = $currentShowID;
+                        $show_rows_processed++;
 
                     }
                     $currentShowID = $show_cache[$title];
@@ -74,34 +103,38 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         if(!empty($episodestart)){
                             $valid_type_found = true;
                             // ERD: Episode(ShowID, EpisodeID, SeasonNumber, EpisodeNumber, EpisodeTitle)
-                            $stmtEp->bind_param("iiis", $currentShowID, $row[11], $row[12], $row[13]); //bind parameters, type is 3 strings.
-                            $stmtEp->execute();
-                            if($stmtEp->affected_rows > 0) $rows_inserted++;
-                            else $rows_skipped++;
+                            $stmtGetEp->bind_param("iii", $currentShowID, $row[11], $row[12]);
+                            $stmtGetEp->execute();
+                            $resEp = $stmtGetEp->get_result();
 
+                            if($existingEp = $resEp->fetch_assoc()){
+                                $stmtUpdateEp->bind_param("si", $row[13], $existingEp['EpisodeID']);
+                                $stmtUpdateEp->execute();
+                                $rows_updated++;
+                            } else {
+                                $stmtInsertEp->bind_param("iiis", $currentShowID, $row[11], $row[12], $row[13]);
+                                $stmtInsertEp->execute();
+                                $rows_inserted++;
+                            }
                             $ep_rows_processed++;
                         }
                         if(!empty($personstart)){
-                            $role = $row[7];
-                            $name = $row[8];
-                            $personKey = $currentShowID . "_" . $role . "_" . $name;
-                            if(!isset($person_cache[$personKey])){
-                                $valid_type_found = true;
-                                // ERD: Person(PersonID, ShowID, MovieID, Role, Name, BornIn, Birthdate)
-                                $stmtPerson->bind_param("issss", $currentShowID, $row[7], $row[8], $row[9], $row[10]);
-                                $stmtPerson->execute();
-                                if($stmtPerson->affected_rows > 0) $rows_inserted++;
-                                else $rows_skipped++;
+                            $stmtGetPerson->bind_param("iss", $currentShowID, $row[8], $row[7]);
+                            $stmtGetPerson->execute();
+                            $resPerson = $stmtGetPerson->get_result();
 
-                                $person_rows_processed++;
-                                $person_cache[$personKey] = $con->insert_id;
+                            if($existingPerson = $resPerson->fetch_assoc()){
+                                $stmtUpdatePerson->bind_param("ssi", $row[9], $row[10], $existingPerson['PersonID']);
+                                $stmtUpdatePerson->execute();
+                                $rows_updated++;
+                            } else {
+                                $stmtInsertPerson->bind_param("issss", $currentShowID, $row[7], $row[8], $row[9], $row[10]);
+                                $stmtInsertPerson->execute();
+                                $rows_inserted++;
                             }
-
+                            $person_rows_processed++;
                         }
-                    }else{
-                        $rows_skipped++;
                     }
-
 
             }
 
@@ -117,19 +150,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 ." at:" . $e->getFile()." at line ".$e->getLine();
             $import_succeeded = false;
         }
-//        if($import_attempted == true){
-//            if($import_succeeded == true){
-//                ?>
-<!--                <h1><span style="color:green;">Import Succeeded</span></h1>-->
-<!--                --><?php
-//            }else{
-//                ?>
-<!--                <h1>Import Failed</h1>-->
-<!--                --><?php //echo $import_error_message; ?>
-<!--                <br/>-->
-<!--                --><?php
-//            }
-//        }
     }
 }
 $pageTitle = "Import Show Data";
