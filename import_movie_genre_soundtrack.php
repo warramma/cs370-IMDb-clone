@@ -153,7 +153,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $maturityRating = get_cell($row, $map, "MaturityRating");
 
             $productionCompanyRaw = get_cell($row, $map, "ProductionCompanyID");
-            $productionCompanyID = ($productionCompanyRaw === "") ? null : ((int)$productionCompanyRaw + 1);
+            $productionCompanyID = ($productionCompanyRaw === "") ? null : ((int)$productionCompanyRaw);
 
             $languageID = (int)get_cell($row, $map, "LanguageID");
 
