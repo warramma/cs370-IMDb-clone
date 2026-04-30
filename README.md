@@ -44,4 +44,5 @@ Import the data in this order
 2. Movie-genre-soundtrack data
 3. Show-episode-person data
 
+CSVs are available in the **data folder** and also on the shared drive: 
 [CSVS](https://drive.google.com/drive/folders/1qe6Q4rolCGj3opqxaB4NbIHcoV-mgbdO?usp=drive_link)
