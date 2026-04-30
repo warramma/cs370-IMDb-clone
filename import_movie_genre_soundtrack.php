@@ -5,6 +5,7 @@ error_reporting(E_ALL);
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 $import_succeeded = false;
+$import_attempted = false;
 $import_error_message = "";
 $rows_inserted = 0;
 $rows_updated = 0;
@@ -320,7 +321,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $import_error_message = $e->getMessage() . " at " . $e->getFile() . " line " . $e->getLine();
     }
 
-
+    $import_attempted = true;
 }
 
 
@@ -333,19 +334,22 @@ if (file_exists("components/_header.php")) {
     <div class="container">
         <h1>Import Movie / Genre / Soundtrack CSV</h1>
         <?php
-        if ($import_succeeded) {
-            echo "<br>";
-            echo "<div class='alert alert-success' role='alert'>";
-            echo "<h2>Import success</h2>";
-            echo "<p>Inserted: " . h($rows_inserted) . "<br>Updated: " . h($rows_updated) . "<br>Skipped: " . h($rows_skipped) . "</p>";
-            echo "<p>Genre rows processed: " . h($genre_rows_processed) . "<br>Movie rows processed: " . h($movie_rows_processed) . "<br>Soundtrack rows processed: " . h($soundtrack_rows_processed) . "</p>";
-            echo "</div>";
-        } else {
-            echo "<br>";
-            echo "<div class='alert alert-danger' role='alert'>";
-            echo "<h2>Import failure</h2>";
-            echo "<p>" . h($import_error_message) . "</p>";
-            echo "</div>";
+        if($import_attempted){
+            if ($import_succeeded) {
+                echo "<br>";
+                echo "<div class='alert alert-success' role='alert'>";
+                echo "<h2>Import success</h2>";
+                echo "<p>Inserted: " . h($rows_inserted) . "<br>Updated: " . h($rows_updated) . "<br>Skipped: " . h($rows_skipped) . "</p>";
+                echo "<p>Genre rows processed: " . h($genre_rows_processed) . "<br>Movie rows processed: " . h($movie_rows_processed) . "<br>Soundtrack rows processed: " . h($soundtrack_rows_processed) . "</p>";
+                echo "</div>";
+            }
+            else {
+                echo "<br>";
+                echo "<div class='alert alert-danger' role='alert'>";
+                echo "<h2>Import failure</h2>";
+                echo "<p>" . h($import_error_message) . "</p>";
+                echo "</div>";
+            }
         }
         ?>
         <p>Expected headers:</p>
