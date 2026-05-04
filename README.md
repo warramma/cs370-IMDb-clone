@@ -37,3 +37,12 @@ Database project - IMDb Clone
 ## Repository Structure
 * `/sql`: Database schema scripts and ERD exports.
 * `/data`: Source CSV files for ETL operations.
+
+## Testing
+Import the data in this order
+1. User-production-language data
+2. Movie-genre-soundtrack data
+3. Show-episode-person data
+
+CSVs are available in the **data folder** and also on the shared drive: 
+[CSVS](https://drive.google.com/drive/folders/1qe6Q4rolCGj3opqxaB4NbIHcoV-mgbdO?usp=drive_link)

@@ -73,25 +73,25 @@ include('components/_header.php');
             output_error("Error connecting to the database: " . $connection_error_message);
         }else{
             echo "<h2>User Report</h2>\n";
-            $user_res = mysqli_query($con, "SELECT Username, JoinDate, BirthDate FROM User");
-            output_table_open(['Username', 'Join Date', 'Birth Date']);
+            $user_res = mysqli_query($con, "SELECT UserID, Username, JoinDate, BirthDate, Email FROM User");
+            output_table_open(['UserID', 'Username', 'Join Date', 'Birth Date', 'Email']);
             while($row = mysqli_fetch_assoc($user_res)){
-                output_row([$row['Username'], $row['JoinDate'], $row['BirthDate']]);
+                output_row([$row['UserID'],$row['Username'], $row['JoinDate'], $row['BirthDate'], $row['Email']]);
             }
             output_table_close();
 
             echo "<h2>Production Companies</h2>\n";
-            $prod_res = mysqli_query($con, "SELECT CompanyName, Headquarters, `Founded Date` FROM ProductionCompany");
-            output_table_open(['Company Name', 'Headquarters', 'Founded Date']);
+            $prod_res = mysqli_query($con, "SELECT ProductionCompanyID, CompanyName, Headquarters, `Founded Date` FROM ProductionCompany");
+            output_table_open(['ID', 'Company Name', 'Headquarters', 'Founded Date']);
             while ($row = mysqli_fetch_assoc($prod_res)) {
-                output_row([$row['CompanyName'], $row['Headquarters'], $row['Founded Date']]);
+                output_row([$row['ProductionCompanyID'],$row['CompanyName'], $row['Headquarters'], $row['Founded Date']]);
             }
             output_table_close();
             echo "<h2>Language Report</h2>\n";
-            $lang_res = mysqli_query($con, "SELECT Language FROM Language");
-            output_table_open(['Language']);
+            $lang_res = mysqli_query($con, "SELECT LanguageID, Language FROM Language");
+            output_table_open(['LanguageID', 'Language']);
             while($row = mysqli_fetch_assoc($lang_res)){
-                output_row([$row['Language']]);
+                output_row([$row['LanguageID'],$row['Language']]);
             }
             output_table_close();
     }

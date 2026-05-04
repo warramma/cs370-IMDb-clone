@@ -52,17 +52,17 @@ function output_person_details_row ($people, $episodes){
     $people_str = "None";
     $episode_str = "None";
     if(sizeof($people) > 0){
-        $people_str = implode("\n", $people);
+        $people_str = implode("<br>", $people);
 
     }
     if(sizeof($episodes) > 0){
-        $episode_str = implode("\n", $episodes);
+        $episode_str = implode("<br>", $episodes);
     }
 
     echo "<tr>\n";
-    echo "  <td colspan='3' class='ps-5'>\n";
-    echo "      People Involved: " . $people_str . "</br>\n";
-    echo "      Episodes: " . $episode_str . "</br>\n";
+    echo "  <td colspan='5' class='ps-5 bg-light'>\n";
+    echo " <strong>   People Involved: </strong><br>" . $people_str . "<br><br>\n";
+    echo "  <strong>    Episodes: </strong><br>" . $episode_str . "<br>\n";
     echo "  </td>\n";
     echo "</tr>\n";
 }
@@ -73,30 +73,19 @@ include('components/_header.php');
 <div class="container">
     <h1>Show, Episode, Person Report</h1>
     <?php
-    $dummy_data = [
-        ["name" => "Amy", "age" => 22, "gender" => "female", "pizza" => "Pepperoni", "pizzeria" => "Pizza Hut"],
-        ["name" => "Amy", "age" => 22, "gender" => "female", "pizza" => "Mushroom", "pizzeria" => "Dominos"],
-        ["name" => "Ben", "age" => 30, "gender" => "male", "pizza" => "Cheese", "pizzeria" => "Little Caesars"],
-        ["name" => "Ben", "age" => 30, "gender" => "male", "pizza" => "Cheese", "pizzeria" => "Pizza Hut"],
-        ["name" => "Cal", "age" => 25, "gender" => "male", "pizza" => "Supreme", "pizzeria" => "Papa Johns"]
-    ];
-
     $final_data = [];
-    $used_dummy = false;
 
     if ($connection_error) {
-        $final_data = $dummy_data;
-        $used_dummy = true;
         output_error("Database connection error: ", $connection_error_message);
     }
     else{
         try {
-            $query = " SELECT t0.showID, t0.title, t0.releaseDate, t0.endDate, t0.maturityRating,"
-                    . " t1.personid, t1.showid, t1.name, t1.role, "
-                    . " t2.episodeid, t2.seasonNumber, t2.episodeNumber, t2.episodeTitle"
-                . " FROM show t0"
-                . " LEFT OUTER JOIN person t1 ON t0.showID = t1.showID"
-                . " LEFT OUTER JOIN episode t2 on t0.showID = t2.showID";
+            $query = " SELECT t0.ShowID, t0.Title, t0.ReleaseDate, t0.EndDate, t0.MaturityRating,"
+                    . " t1.PersonID, t1.name, t1.role, "
+                    . " t2.EpisodeID, t2.SeasonNumber, t2.EpisodeNumber, t2.EpisodeTitle"
+                . " FROM `show` t0"
+                . " LEFT OUTER JOIN person t1 ON t0.ShowID = t1.ShowID"
+                . " LEFT OUTER JOIN episode t2 on t0.ShowID = t2.ShowID";
 
 
             // example of user input:      . " WHERE t0.name = '" . $userSelectedName . "'"
@@ -108,58 +97,47 @@ include('components/_header.php');
                     $final_data[] = $row;
                 }
             } else {
-                $final_data = $dummy_data;
-                $used_dummy = true;
+                echo "<div class='alert alert-info'>No data found in the database.</div>";
             }
         }catch(Exception $e){
-            $final_data = $dummy_data;
-            $used_dummy = true;
             echo "<div class='alert alert-danger'><strong>SQL Error:</strong> " . $e->getMessage() . "</div>";
         }
 
         }
-    if ($used_dummy) {
-        echo "<div class='alert alert-info'>Showing dummy data.</div>";
-    }
     if(!empty($final_data)){
             output_table_open();
             $last_show = null; //as in last/previous name not your last name
             $people = array();
             $episodes = array();
             foreach ($final_data as $row) {
-                $ep = array();
-                $p = array();
-            if ($last_show != $row["showid"]) {
-                if ($last_show != null) {
-                    output_person_details_row($pizzas, $pizzerias);
+                if ($last_show !== $row["ShowID"]) {
+                    if ($last_show != null) {
+                        output_person_details_row($people, $episodes);
+                    }
+                    output_show_row($row["ShowID"], $row["Title"], $row["ReleaseDate"], $row["EndDate"], $row["MaturityRating"]);
+                    $people = array();
+                    $episodes = array();
+                    $last_show = $row["ShowID"];
                 }
-                output_show_row($row["showid"], $row["title"], $row["releasedate"], $row["enddate"], $row["maturityrating"]);
-                $p = array();
-                $ep = array();
+
+                if (!empty($row["PersonID"]) && !in_array($row["PersonID"], $people)) {
+                    $p_info = htmlspecialchars($row["name"] . " (as " . $row["role"] . ")");
+                    if (!in_array($p_info, $people)) {
+                        $people[] = $p_info;
+                    }
+                }
+                if (!empty($row["EpisodeID"]) && !in_array($row["EpisodeID"], $episodes)) {
+                    $e_info = htmlspecialchars("S" . $row["SeasonNumber"] . "E" . $row["EpisodeNumber"] . ": " . $row["EpisodeTitle"]);
+                    if (!in_array($e_info, $episodes)) {
+                        $episodes[] = $e_info;
+                    }
+                }
             }
 
-            if (!empty($row["personid"]) && !in_array($row["personid"], $people)) {
-                $person_str = "";
-                if(sizeof($p) > 0){
-                    $person_str = implode(" ", $p);
-
-                }
-                $people[] = $person_str;
-            }
-            if (!empty($row["episodeid"]) && !in_array($row["episodeid"], $episode)) {
-                $episode_str = "";
-                if(sizeof($ep) > 0){
-                    $episode_str = implode(" ", $ep);
-
-                }
-                $episode[] = $episode_str;
-            }
-            $last_show = $row["showid"];
-        }
-
-        if ($last_show != null) {
+        if ($last_show !== null) {
             output_person_details_row($people, $episodes);
         }
+
         output_table_close();
 
     }
