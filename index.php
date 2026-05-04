@@ -6,4 +6,24 @@
     </div>
 </div>
 
+<?php
+// Test data
+$team_members = [
+        ["name" => "Lava Chicken", "body" => "fwq", "image" => "assets/lalalalava.jpg"],
+        ["name" => "Chicken Jockey", "body" => "dwqd", "image" => "assets/lalalalava.jpg"],
+        ["name" => "I am Steve", "body" => "dwqd", "image" => "assets/lalalalava.jpg"]
+];
+?>
+
+<div class="card-grid">
+    <?php foreach ($team_members as $member): ?>
+        <?php
+        $name = $member['name'];
+        $body = $member['body'];
+        $image = $member['image'];
+        include 'components/_card.php';
+        ?>
+    <?php endforeach; ?>
+</div>
+
 <?php include_once("components/_footer.php"); ?>
