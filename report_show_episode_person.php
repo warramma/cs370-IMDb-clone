@@ -121,7 +121,7 @@ include('components/_header.php');
                 }
 
                 if (!empty($row["PersonID"]) && !in_array($row["PersonID"], $people)) {
-                    $p_info = htmlspecialchars($row["name"] . " (" . $row["role"] . ")");
+                    $p_info = htmlspecialchars($row["name"] . " (as " . $row["role"] . ")");
                     if (!in_array($p_info, $people)) {
                         $people[] = $p_info;
                     }
