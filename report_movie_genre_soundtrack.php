@@ -46,12 +46,12 @@ $currentGenreID = null;
 $currentMovieID = null;
 $openMovieTable = false;
 
-$pageTitle = "Movie / Genre / Soundtrack Report";
+$pageTitle = "Movie, Genre, Soundtrack Report";
 include("components/_header.php");
 ?>
 
     <div class="container mt-4">
-    <h1 class="mb-1">Movie / Genre / Soundtrack Report</h1>
+    <h1 class="mb-1">Movie, Genre, Soundtrack Report</h1>
 
 <?php while ($row = mysqli_fetch_assoc($result)) { ?>
 
@@ -108,9 +108,10 @@ include("components/_header.php");
             Rating: <?php echo htmlspecialchars($row["MaturityRating"]); ?>
         </div>
 
-        <table class="table table-bordered table-sm align-middle">
-        <thead class="table-light">
-        <tr>
+        <div class="table-responsive">
+        <table class="table table-bordered table-hover showDataTable">
+        <thead class="table-dark">
+        <tr class="showDataHeaderRow">
             <th>SoundtrackID</th>
             <th>Title</th>
             <th>Composer</th>
@@ -118,6 +119,7 @@ include("components/_header.php");
         </tr>
         </thead>
         <tbody>
+        </div>
 
         <?php
         $currentMovieID = $row["MovieID"];
