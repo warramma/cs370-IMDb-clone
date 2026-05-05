@@ -7,10 +7,6 @@ html {
     overscroll-behavior: none;
 }
 
-h1 {
-    color: white;
-}
-
 label {
     color: white;
 }
@@ -56,22 +52,20 @@ a {
     height: 75%;
 }
 
-.card {
+.card-x {
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.4);
     transition: box-shadow 0.5s;
     width: 250px;
     border-radius: 5px;
-    display: flex;
 }
 
-.card img {
+.card-x img {
     width: 160px;
     height: 160px;
     object-fit: cover;
-    margin: 0 auto;
 }
 
-.card:hover {
+.card-x:hover {
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 }
 
@@ -79,14 +73,10 @@ a {
     padding: 2px 4px;
 }
 
-.card-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
+.card-x-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     gap: 20px;
-    padding: 20px;
-    width: 100%;
 }
 .drop {
     margin: 0 !important;
