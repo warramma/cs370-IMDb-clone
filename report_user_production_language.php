@@ -19,9 +19,9 @@ function output_error($title, $error){
 }
 function output_table_open($headers){
     echo "<div class='table-responsive'>\n";
-    echo "<table class='table table-bordered table-hover'>\n";
+    echo "<table class='table table-bordered table-hover showDataTable'>\n";
     echo "<thead class='table-dark'>\n";
-    echo "<tr>\n";
+    echo "<tr class='showDataHeaderRow'>\n";
     foreach($headers as $header){
         echo "<th>$header</th>\n";
     }
@@ -66,9 +66,9 @@ function output_person_details_row ($pizzas, $pizzerias){
 $pageTitle = "User, Production, Language";
 include('components/_header.php');
 ?>
-<div class="container">
-    <h1>User, Production, Language Report</h1>
-    <?php
+    <div class="container mt-4">
+        <h1 class="mb-1">User, Production, Language Report</h1>
+        <?php
         if($connection_error){
             output_error("Error connecting to the database: " . $connection_error_message);
         }else{
@@ -94,9 +94,9 @@ include('components/_header.php');
                 output_row([$row['LanguageID'],$row['Language']]);
             }
             output_table_close();
-    }
-    ?>
-</div>
+        }
+        ?>
+    </div>
 
 <?php
 include("components/_footer.php");
