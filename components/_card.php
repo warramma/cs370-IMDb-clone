@@ -1,7 +1,7 @@
 <!--db names are temporary-->
 <div class="card">
     <img src="<?=htmlspecialchars($image) ?>" alt="Avatar"
-         onerror="this.onerror=null; this.src='assets/lalalalava.jpg';"
+         onerror="this.onerror=null; this.src='assets/lalalalava.jpg';">
     <div class="card-header">
         <div class="container">
             <h4><b> <?= htmlspecialchars($name) ?> </b></h4>

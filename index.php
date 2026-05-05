@@ -15,7 +15,7 @@ $team_members = [
 ];
 ?>
 
-<div class="card-grid">
+<div class="card-container">
     <?php foreach ($team_members as $member): ?>
         <?php
         $name = $member['name'];
