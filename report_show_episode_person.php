@@ -70,41 +70,41 @@ function output_person_details_row ($people, $episodes){
 $pageTitle = "Show, Episode, Person";
 include('components/_header.php');
 ?>
-<div class="container">
-    <h1>Show, Episode, Person Report</h1>
-    <?php
-    $final_data = [];
+    <div class="container mt-4">
+        <h1 class="mb-1">Show, Episode, Person Report</h1>
+        <?php
+        $final_data = [];
 
-    if ($connection_error) {
-        output_error("Database connection error: ", $connection_error_message);
-    }
-    else{
-        try {
-            $query = " SELECT t0.ShowID, t0.Title, t0.ReleaseDate, t0.EndDate, t0.MaturityRating,"
-                    . " t1.PersonID, t1.name, t1.role, "
-                    . " t2.EpisodeID, t2.SeasonNumber, t2.EpisodeNumber, t2.EpisodeTitle"
-                . " FROM `show` t0"
-                . " LEFT OUTER JOIN person t1 ON t0.ShowID = t1.ShowID"
-                . " LEFT OUTER JOIN episode t2 on t0.ShowID = t2.ShowID";
+        if ($connection_error) {
+            output_error("Database connection error: ", $connection_error_message);
+        }
+        else{
+            try {
+                $query = " SELECT t0.ShowID, t0.Title, t0.ReleaseDate, t0.EndDate, t0.MaturityRating,"
+                        . " t1.PersonID, t1.name, t1.role, "
+                        . " t2.EpisodeID, t2.SeasonNumber, t2.EpisodeNumber, t2.EpisodeTitle"
+                        . " FROM `show` t0"
+                        . " LEFT OUTER JOIN person t1 ON t0.ShowID = t1.ShowID"
+                        . " LEFT OUTER JOIN episode t2 on t0.ShowID = t2.ShowID";
 
 
-            // example of user input:      . " WHERE t0.name = '" . $userSelectedName . "'"
+                // example of user input:      . " WHERE t0.name = '" . $userSelectedName . "'"
 
-            $result = mysqli_query($con, $query);
-            //false can mean error or no records back
-            if ($result && mysqli_num_rows($result) > 0) {
-                while ($row = $result->fetch_assoc()) {
-                    $final_data[] = $row;
+                $result = mysqli_query($con, $query);
+                //false can mean error or no records back
+                if ($result && mysqli_num_rows($result) > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        $final_data[] = $row;
+                    }
+                } else {
+                    echo "<div class='alert alert-info'>No data found in the database.</div>";
                 }
-            } else {
-                echo "<div class='alert alert-info'>No data found in the database.</div>";
+            }catch(Exception $e){
+                echo "<div class='alert alert-danger'><strong>SQL Error:</strong> " . $e->getMessage() . "</div>";
             }
-        }catch(Exception $e){
-            echo "<div class='alert alert-danger'><strong>SQL Error:</strong> " . $e->getMessage() . "</div>";
-        }
 
         }
-    if(!empty($final_data)){
+        if(!empty($final_data)){
             output_table_open();
             $last_show = null; //as in last/previous name not your last name
             $people = array();
@@ -134,18 +134,18 @@ include('components/_header.php');
                 }
             }
 
-        if ($last_show !== null) {
-            output_person_details_row($people, $episodes);
+            if ($last_show !== null) {
+                output_person_details_row($people, $episodes);
+            }
+
+            output_table_close();
+
         }
 
-        output_table_close();
-
-    }
 
 
-
-    ?>
-</div>
+        ?>
+    </div>
 
 <?php
 include("components/_footer.php");
