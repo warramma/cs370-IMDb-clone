@@ -1,6 +1,6 @@
 <html lang="en">
 <head>
-    <title><?php echo isset($pageTitle) ? $pageTitle : "Pizza Database";?></title>
+    <title><?php echo isset($pageTitle) ? $pageTitle : "bDMI Introverts";?></title>
     <link href="css/bootstrap.css" rel="stylesheet"/>
     <link href="css/style.css" rel="stylesheet"/>
     <link href="assets/favicon.ico" rel="icon" type="image/x-icon"/>

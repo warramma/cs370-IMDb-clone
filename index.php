@@ -16,7 +16,7 @@ $team_members = [ // I hate how this says "team_members", reused code so funny
 ];
 ?>
 
-    <div class="card-grid">
+    <div class="card-grid card-x-container">
         <?php foreach ($team_members as $member): ?>
             <?php
             $name = $member['name'];
